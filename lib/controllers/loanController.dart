@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loan/models/frecuencyModels.dart';
 
 import 'package:dio/dio.dart' as dio_client;
+import 'package:loan/models/loanModel.dart';
 
 import '../constant.dart';
 
@@ -11,6 +12,8 @@ class LoanController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final RxBool isLoading = false.obs;
   late Frecuency frecuency;
+
+  RxList<Loan> loansList = <Loan>[].obs;
 
   final selectedValue = TextEditingController();
   final amount = TextEditingController();
@@ -25,6 +28,7 @@ class LoanController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    await getAllLoans();
     await getFrecuencies();
   }
 
@@ -33,10 +37,49 @@ class LoanController extends GetxController {
     update();
   }
 
+  void setLoans(List<Loan> list) {
+    loansList.value = list;
+    update();
+  }
+
   getFrecuencyIdByName(String name) {
     final foundFrecuency =
         frecuencyList.firstWhereOrNull((frecuency) => frecuency.name == name);
     return foundFrecuency ?? -1;
+  }
+
+  Future getAllLoans() async {
+    isLoading.value = true;
+    final dio = dio_client.Dio();
+    List<Loan> loanList = [];
+    try {
+      var response = await dio
+          .get(
+            '${appConstants.apiBaseUrl}/loans',
+            options: dio_client.Options(
+              receiveTimeout: const Duration(seconds: 10),
+            ),
+          )
+          .timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) {
+        final List data = response.data['loans'];
+        loanList = data.map((item) => Loan.fromJson(item)).toList();
+        setLoans(loanList);
+        isLoading.value = false;
+      } else {
+        isLoading.value = false;
+        Get.snackbar("Error", "Error getting loans",
+            duration: const Duration(seconds: 3),
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.red);
+      }
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar("Error", "Error getting loans",
+          duration: const Duration(seconds: 3),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red);
+    }
   }
 
   Future getFrecuencies() async {
@@ -85,7 +128,7 @@ class LoanController extends GetxController {
     };
     final dio = dio_client.Dio();
     var response = await dio.post(
-      '${appConstants.apiBaseUrl}/loans/quote',
+      '${appConstants.apiBaseUrl}/loans/quote/amount',
       data: jsonBody,
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
