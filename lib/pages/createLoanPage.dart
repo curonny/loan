@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +37,7 @@ class _CreateLoanPageState extends State<CreateLoanPage> {
         child: Column(
           children: [
             Obx(() => controller.gettingFrecuencies.value
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : Form(
                     key: controller.formKey,
                     child: SingleChildScrollView(
@@ -169,11 +171,10 @@ class _CreateLoanPageState extends State<CreateLoanPage> {
             Obx(() => controller.loanCreated.value
                 ? IconButton(
                     onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 1));
-                      Get.offAll(HomePage());
+                      Get.to(const HomePage());
                     },
-                    icon: Icon(Icons.home))
-                : SizedBox())
+                    icon: const Icon(Icons.home))
+                : const SizedBox())
           ],
         ),
       ),

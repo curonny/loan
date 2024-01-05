@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +19,6 @@ class _HomePageState extends State<HomePage> {
   LoanController get controller => Get.put(LoanController());
   @override
   Widget build(BuildContext context) {
-    controller.frecuencyList.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -45,55 +46,58 @@ class _HomePageState extends State<HomePage> {
                 return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
+                        elevation: 3,
                         child: Column(
-                      children: [
-                        ListTile(
-                          title: Text(
-                              "Opening commission: ${loan.openingCommission}"),
-                          subtitle: Column(
-                            children: [
-                              Text(
-                                  "Total interest amount: ${loan.totalInterestAmount}"),
-                              Text(
-                                  "Total payment amount: ${loan.totalPaymentAmount}"),
-                            ],
-                          ),
-                        ),
-                        Row(
                           children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "Amount: ${float.parse(loan.amount).toStringAsFixed(2)}"),
-                                    Text("Term: ${loan.term}"),
-                                  ],
-                                ),
+                            ListTile(
+                              title: Text(
+                                  "Opening commission: ${loan.openingCommission}"),
+                              subtitle: Column(
+                                children: [
+                                  Text(
+                                      "Total interest amount: ${loan.totalInterestAmount}"),
+                                  Text(
+                                      "Total payment amount: ${loan.totalPaymentAmount}"),
+                                ],
                               ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "Capacity discount: ${float.parse(loan.capacityDiscount).toStringAsFixed(2)}"),
-                                    Text(
-                                        "Interest rate: ${float.parse(loan.interestRate).toStringAsFixed(2)}"),
-                                  ],
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            "Amount: ${float.parse(loan.amount).toStringAsFixed(2)}"),
+                                        Text("Term: ${loan.term}"),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            "Capacity discount: ${float.parse(loan.capacityDiscount).toStringAsFixed(2)}"),
+                                        Text(
+                                            "Interest rate: ${float.parse(loan.interestRate).toStringAsFixed(2)}"),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                            Text(
+                                "Created date:${DateFormat('dd-MM-yyyy HH:mm:ss').format(loan.createdAt)}")
                           ],
-                        ),
-                        Text(
-                            "Created date:${DateFormat('dd-MM-yyyy HH:mm:ss').format(loan.createdAt)}")
-                      ],
-                    )));
+                        )));
               },
             )),
     );

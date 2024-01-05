@@ -1,4 +1,5 @@
-import 'package:dio/dio.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan/models/frecuencyModels.dart';
@@ -8,7 +9,6 @@ import 'package:loan/models/loanCreateModel.dart';
 import 'package:loan/models/loanModel.dart';
 
 import '../constant.dart';
-import '../pages/loansPage.dart';
 
 class LoanController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -43,6 +43,7 @@ class LoanController extends GetxController {
 
   void setLoans(List<Loan> list) {
     loansList.value = list;
+    loansList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     update();
   }
 
@@ -133,10 +134,12 @@ class LoanController extends GetxController {
     var response = await dio.post(
       '${appConstants.apiBaseUrl}/loans/quote/amount',
       data: jsonBody,
-      options: Options(contentType: Headers.formUrlEncodedContentType),
+      options: dio_client.Options(
+          contentType: dio_client.Headers.formUrlEncodedContentType),
     );
     if (response.statusCode == 201) {
       LoanDetails loan = LoanDetails.fromJson(response.data);
+
       loanCreated.value = true;
 
       Get.snackbar("Done", "Loan create sucessfully",

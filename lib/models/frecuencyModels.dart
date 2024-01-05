@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
 Frecuency frecuencyFromJson(String str) => Frecuency.fromJson(json.decode(str));
