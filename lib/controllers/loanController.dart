@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:loan/models/frecuencyModels.dart';
 
 import 'package:dio/dio.dart' as dio_client;
+import 'package:loan/models/loanCreateModel.dart';
 import 'package:loan/models/loanModel.dart';
 
 import '../constant.dart';
+import '../pages/loansPage.dart';
 
 class LoanController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -24,6 +26,8 @@ class LoanController extends GetxController {
   AppConstants appConstants = AppConstants();
   RxList frecuencyList = <Frecuency>[].obs;
   RxBool gettingFrecuencies = false.obs;
+
+  RxBool loanCreated = false.obs;
 
   @override
   void onInit() async {
@@ -116,7 +120,6 @@ class LoanController extends GetxController {
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red);
     }
-    print(frecuencyId.paymentsPerYear);
 
     isLoading.value = true;
     Map<String, dynamic> jsonBody = {
@@ -132,6 +135,14 @@ class LoanController extends GetxController {
       data: jsonBody,
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
-    print(response);
+    if (response.statusCode == 201) {
+      LoanDetails loan = LoanDetails.fromJson(response.data);
+      loanCreated.value = true;
+
+      Get.snackbar("Done", "Loan create sucessfully",
+          duration: const Duration(seconds: 3),
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green);
+    }
   }
 }
