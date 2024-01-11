@@ -171,7 +171,7 @@ class _CreateLoanPageState extends State<CreateLoanPage> {
             Obx(() => controller.loanCreated.value
                 ? IconButton(
                     onPressed: () async {
-                      Get.to(const HomePage());
+                      Get.offAll(const HomePage());
                     },
                     icon: const Icon(Icons.home))
                 : const SizedBox())

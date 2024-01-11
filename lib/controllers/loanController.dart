@@ -146,6 +146,11 @@ class LoanController extends GetxController {
           duration: const Duration(seconds: 3),
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.green);
+      amount.text = "";
+      selectedValue.text = "";
+      term.text = "";
+      interestRate.text = "";
+      openingCommission.text = "";
     }
   }
 }
